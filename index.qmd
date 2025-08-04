@@ -1,0 +1,18 @@
+# Summary {.unnumbered}
+
+This course introduces numerical methods with applications in life sciences. Topics include root finding, numerical integration and differentiation, interpolation (including splines), optimization (including linear programming), and solving ordinary differential equations (initial and boundary value problems). Students apply these methods to real-world biological and chemical systems such as enzyme kinetics, drug diffusion, and population dynamics. The course combines theoretical background, practical coding exercises using Python, and case studies, culminating in applied student projects.
+
+
+## Organization
+-	Language: English
+-	Lab-based courses
+-	20 courses of 2 hours: lab to submit for each session.
+
+
+## Resources
+
+[Numerical Methods for Engineers](https://www.mbit.edu.in/wp-content/uploads/2020/05/Numerical_methods_for_engineers_for_engi.pdf)
+
+[Python Numerical Methods](https://pythonnumericalmethods.studentorg.berkeley.edu/notebooks/Index.html)
+
+

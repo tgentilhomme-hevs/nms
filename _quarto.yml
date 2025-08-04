@@ -1,0 +1,16 @@
+profile:
+  default: slides
+author:
+    - name: Théophile Gentilhomme
+      institute: HES-SO Valais-Wallis
+date: last-modified
+date-format: long
+  
+bibliography: references.bib
+
+format:
+  revealjs:
+    include-in-header: _quarto/includes/revealscript.html
+
+
+

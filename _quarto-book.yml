@@ -1,0 +1,57 @@
+project:
+  type: book
+  output-dir: _book
+  post-render: quarto render --profile slides
+
+number-depth: 1
+
+book:
+  reader-mode: false
+  title: "Numerical Methods"
+  chapters:
+    - index.qmd
+    - part: "Week 1: Introduction to Numerical Methods"
+      sections:
+        - W1S1/index.qmd
+        - W1S2/index.qmd
+    - part: "Week 2: interpolation and splines"
+      sections:
+        - W2S1/index.qmd
+        - W2S2/index.qmd
+    - part: "Week 3: Numerical integration and differentiation"
+      sections:
+        - W3S1/index.qmd
+        - W3S2/index.qmd
+    - part: "Week 4: Root finding and optimization"
+      sections:
+        - W4S1/index.qmd
+        - W4S2/index.qmd
+    - part: "Week 5: Optimization and linear programming"
+      sections:
+        - W5S1/index.qmd
+        - W5S2/index.qmd
+    - part: "Week 6: Revision and midterm"
+      sections:
+        - W6S1/index.qmd
+        - W6S2/index.qmd
+    - part: "Week 7: ODE and initial value problems"
+      sections:
+        - W7S1/index.qmd
+        - W7S2/index.qmd
+    - part: "Week 8: ODE and boundary value problems"
+      sections:
+        - W8S1/index.qmd
+        - W8S2/index.qmd
+    - part: "Week 9: practical case studies"
+      sections:
+        - W9S1/index.qmd
+        - W9S2/index.qmd
+    - part: "Week 10: Student projects"
+      sections:
+        - W10S1/index.qmd
+
+format:
+  live-html:
+    theme: cosmo
+  pdf:
+    documentclass: scrreprt
