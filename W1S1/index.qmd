@@ -1,17 +1,8 @@
-# Python Basics & Objects
+# Introduction NMS
 
-## Objectives
-- Introduction to Google Colab 
-- How to write simple Python code
-- Use variables, numbers, text, conditions, and loops
-- Understand that everything in Python is an "object"
-
-## Topics
-- Numbers, strings, booleans
-- Variables, Operators
-- if, else, for, while
-- print() and input()
-- Object methods like .upper() on strings
+* What are numerical methods?
+* Why do we need numerical rather than analytical solutions
+* Overview
 
 
 ## Content
