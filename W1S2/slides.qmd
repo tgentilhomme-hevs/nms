@@ -1,6 +1,6 @@
 ---
 title: "Week 1: Introduction & Taylor Series"
-subtitle: "W1S1: Introduction"
+subtitle: "W1S2: Taylor Series"
 format:
   live-revealjs:
     slide-number: true
@@ -10,9 +10,10 @@ format:
     preview-links: auto
     chalkboard: true
     logo: https://www.hevs.ch/_nuxt/img/logo_hesso.9af1d79.svg
-    footer: "W1S1 - Introduction"
+    footer: "W1S2 - Taylor Series"
     include-in-header: ../_includes/revealscript.html
     include-after-body: ../_includes/backbutton.html
+    css: ../styles.css
     
 execute:
   echo: true       # ← this shows code
@@ -20,10 +21,123 @@ execute:
   eval: true       # ← this runs the code
 ---
 
-## Introduction
+## Taylor series
+
+::: {.scroll-block}
+$$ 
+f(x) = f(a) + f'(a)(x-a) + \frac{f''(a)}{2!}(x-a)^2 + \frac{f^{(3)}(a)}{3!}(x-a)^3 + \cdots 
+$$
+:::
+
+
+
+::: {.scroll-block}
+$$ 
+f(x) = \sum_{n=0}^{\infty} \frac{f^{(n)}(a)}{n!} (x-a)^n
+$$
+:::
+
+## Example: approximate cos(x) at a = 0
+
+::: callout-tip
+$$
+cos'(x) = - sin(x)
+$$
+:::
+
+---
+
+::: {.scroll-block}
+$$
+\cos(x) \approx 
+\underbrace{1}_{n=0}
++ \underbrace{0 \cdot x}_{n=1}
++ \underbrace{\frac{-1}{2!}x^2}_{n=2}
++ \underbrace{0 \cdot x^3}_{n=3}
++ \underbrace{\frac{1}{4!}x^4}_{n=4}
++ \underbrace{0 \cdot x^5}_{n=5}
+$$
+:::
+
+Simplified:
+
+::: {.scroll-block}
+$$
+\cos(x) \approx 1 - \frac{x^2}{2} + \frac{x^4}{24}
+$$
+:::
+
+## Display
 
 ```{pyodide}
-print("Hello World!")
-print("Welcome to the Python Summer Course!")
+import numpy as np
+import matplotlib.pyplot as plt
+
+# domain
+x = np.linspace(-4, 4, 400)
+y_true = np.cos(x)
+
+# Taylor approximations around 0
+y0 = np.ones_like(x)                      # order 0: 1
+y2 = 1 - x**2/2                           # order 2
+y4 = 1 - x**2/2 + x**4/24                 # order 4
+
+# plot
+plt.figure(figsize=(7,5))
+plt.plot(x, y_true, 'k', label="cos(x)")
+plt.plot(x, y0, '--', label="Order 0")
+plt.plot(x, y2, '--', label="Order 2")
+plt.plot(x, y4, '--', label="Order 4")
+plt.ylim(-2, 2)
+plt.xlabel("x")
+plt.ylabel("y")
+plt.title("Taylor Approximations of cos(x) at 0")
+plt.legend()
+plt.grid(True)
+plt.show()
 ```
 
+## SymPy
+
+::: callout-example
+**SymPy** is a Python library for **symbolic mathematics**.  
+It lets us manipulate equations like in algebra: simplify, expand, and compute exact derivatives or integrals.
+
+:::
+
+### Example
+
+```{pyodide}
+import sympy as sp
+
+# define the symbol and function
+x = sp.symbols('x')
+f = sp.cos(x)
+
+# compute derivative
+f_prime = sp.diff(f, x)
+
+f, f_prime
+```
+
+---
+
+```{pyodide}
+import numpy as np
+
+# create a fast numerical version using lambdify
+f_num = sp.lambdify(x, f, "numpy")
+
+# evaluate on an array
+X = np.linspace(-4, 4, 200)
+Y = f_num(X)
+
+# plot
+plt.plot(X, Y, label="cos(x) from lambdify")
+plt.xlabel("x")
+plt.ylabel("f(x)")
+plt.title("SymPy expression turned into NumPy function")
+plt.legend()
+plt.grid(True)
+plt.show()
+```
