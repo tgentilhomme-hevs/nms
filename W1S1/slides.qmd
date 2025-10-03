@@ -20,10 +20,116 @@ execute:
   eval: true       # ← this runs the code
 ---
 
-## Introduction
+## What are numerical methods?
 
-```{pyodide}
-print("Hello World!")
-print("Welcome to the Python Summer Course!")
+> **Numerical method**  
+> A mathematical tool designed to solve numerical problems
+
+
+> **Ordinary Differential Equation (ODE)**  
+> An ODE is an equation that describes how a quantity changes over time (or another variable), using its **rate of change**.  
+
+## Examples
+
+A simple model of bacterial growth:
+
+$$
+\frac{dN}{dt} = r N
+$$
+
+- \(N(t)\): population size at time \(t\)  
+- \(r\): intrinsic growth rate 
+
+::: callout-note
+Often easier to describe the system variation rather that defining the system behavior over time!
+:::
+
+## Solving the equation
+
+- But what we want tis to solve the equatin over time.
+
+- But many ODE have non analytical solutions (or very complex).
+
+- Numerical method: solve it numerically.
+
+## Derivative
+
+Preparitory videos on derivative.
+
+::: callout-note
+Explain what represent a derivative in an ODE.
+:::
+
+## Juypter Notebook / Nbgrader
+
+* [Noto](https://noto.epfl.ch/)
+* [Colab](https://colab.google/)
+* Your local installation (e.g. VScode)
+
+You need to complete:
+```python
+# my_answer = ...
+# YOUR CODE HERE
+raise NotImplementedError()
 ```
+## Control Continu
+
+::: callout-warning
+You must submit your complete notebook on CyberLearn BEFORE the next session!
+:::
+
+## What you need for this lab
+
+Focus of today is get a first contact with numerica methods and ODE .
+
+We will see more details along this course but we will start straight to the point!
+
+::: callout-objectives
+* Familarize with Jupyter Notebook / NB grader
+* How to use data
+* How to use ODE
+:::
+
+## What do I need (but should check doc)
+
+> **Read csv file**
+>```python
+>pd.read_csv('my_filename.csv')
+>```
+
+> **Get Pandas colum values**
+>```python
+> my_col_data = data['MyColName'].values
+> ```
+
+> **Plot x vs y**
+>```python 
+> plt.scatter(x, y, label='My super plot')
+> ```
+
+---
+
+> **Fit a curve**
+>```python
+> from scipy.optimize import curve_fit
+> # Fit data point with a provided model (function)
+> curve_fit(model, x, y)
+>```
+
+> **Linear regression**
+>```python
+> from sklearn.linear_model import LinearRegression
+> # Plot X vs Y fitting a linear model
+> LinearRegression().fit(x, y)
+> ```
+
+> **Solve ODE (initial value problem)**
+>```python 
+> from scipy.integrate import solve_ivp
+> # my_ode(t, y, a, b, c)
+>solve_ivp(my_ode, [start, end], [P0], args=(a, b, c), t_eval=time)
+> plt.scatter(x, y, label='My super plot')
+> ```
+
+
 

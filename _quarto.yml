@@ -1,7 +1,7 @@
 profile:
   default: slides
 author:
-    - name: Théophile Gentilhomme
+    - name: Théophile Gentilhomme, Nils Hanik
       institute: HES-SO Valais-Wallis
 date: last-modified
 date-format: long
