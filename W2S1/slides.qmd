@@ -1,6 +1,6 @@
 ---
-title: "Week 1: Introduction & Taylor Series"
-subtitle: "W1S1: Introduction"
+title: "Week 2: Interpolation - Newton and Lagrange"
+subtitle: "W2S1: Interpolation"
 format:
   live-revealjs:
     slide-number: true
@@ -10,9 +10,10 @@ format:
     preview-links: auto
     chalkboard: true
     logo: https://www.hevs.ch/_nuxt/img/logo_hesso.9af1d79.svg
-    footer: "W1S1 - Introduction"
+    footer: "W2S1 - Interpolation"
     include-in-header: ../_includes/revealscript.html
     include-after-body: ../_includes/backbutton.html
+    css: ../styles.css
     
 execute:
   echo: true       # ← this shows code
@@ -20,28 +21,37 @@ execute:
   eval: true       # ← this runs the code
 ---
 
-## Interpolation (Newton & Lagrange)
+## Interpolation
+
 
 ::: callout-example
 **Goal:** Construct a polynomial that passes exactly through given data points.  
+:::
 
-- **Lagrange interpolation**  
-  Uses a basis of polynomials \(L_i(x)\) such that \(L_i(x_j) = \delta_{ij}\).  
+## Newton interpolation
+
+  Uses divided differences to build the polynomial incrementally.  
+  More efficient for adding new points.  
+  Formula:  
+
+::: {.scroll-block}
+  $$
+  P(x) = f[x_0] + f[x_0,x_1](x-x_0) + f[x_0,x_1,x_2](x-x_0)(x-x_1) + \cdots
+  $$
+:::
+
+$f[x_i, ..., x_j]$: divided differences (no need to know by heart!)
+
+## Lagrange Interpolation 
+
+  Uses a basis of polynomials $L_i(x)$ such that $L_i(x_j) = \delta_{ij}$.  
   Formula:  
   $$
   P(x) = \sum_{i=0}^{n} y_i \, L_i(x)
   $$
 
----
+Each polynom $L_i$ equal 1 to the point $(x_i, y_i)$ and 0 in all other points $(x_j, y_j)$. 
 
-- **Newton interpolation**  
-  Uses divided differences to build the polynomial incrementally.  
-  More efficient for adding new points.  
-  Formula:  
-  $$
-  P(x) = f[x_0] + f[x_0,x_1](x-x_0) + f[x_0,x_1,x_2](x-x_0)(x-x_1) + \cdots
-  $$
-:::
 
 ## Example: Lagrange Interpolation
 
@@ -50,23 +60,41 @@ import numpy as np
 import matplotlib.pyplot as plt
 from scipy.interpolate import lagrange
 
-# data points
+# data points (non-trivial values)
 x_points = np.array([0, 1, 2])
-y_points = np.array([1, 2, 0])
+y_points = np.array([2, 3, 1])
+n = len(x_points)
 
-# build interpolation polynomial
+# compute Lagrange basis polynomials
+def L_i(i, x):
+    L = np.ones_like(x)
+    for j in range(n):
+        if j != i:
+            L *= (x - x_points[j]) / (x_points[i] - x_points[j])
+    return L
+
+# build total interpolation polynomial
 poly = lagrange(x_points, y_points)
 
-# evaluation
-X = np.linspace(-1, 3, 200)
-Y = poly(X)
+# evaluation grid
+X = np.linspace(-0.5, 2.5, 400)
+Y_total = poly(X)
 
-# plot
-plt.scatter(x_points, y_points, color="red", zorder=3, label="Data points")
-plt.plot(X, Y, label="Lagrange polynomial")
+# plot individual L_i(x)
+plt.figure(figsize=(7,5))
+colors = ["C0", "C1", "C2"]
+for i in range(n):
+    Li = L_i(i, X)
+    plt.plot(X, Li, "--", color=colors[i], label=f"L{i}(x)")
+    plt.scatter(x_points[i], 0, color=colors[i], marker="o", zorder=3)
+
+# plot total polynomial and data
+plt.plot(X, Y_total, 'k', linewidth=2, label="P(x) = Σ yᵢ·Lᵢ(x)")
+plt.scatter(x_points, y_points, color="red", zorder=5, label="Data points")
+
 plt.xlabel("x")
 plt.ylabel("y")
-plt.title("Lagrange Interpolation")
+plt.title("Lagrange Interpolation and Basis Polynomials")
 plt.legend()
 plt.grid(True)
 plt.show()
@@ -74,20 +102,20 @@ plt.show()
 
 ## Polynomial Regression
 
-::: callout-note
 **Goal:** Find a polynomial that *best fits* data points, not necessarily passing exactly through them.  
 
+::: callout-note
 - **Regression vs Interpolation**  
   - Interpolation: curve passes *through all points*.  
   - Regression: curve *minimizes error* between model and data.  
+:::
 
-- **Polynomial regression (degree 2)**:  
+**Polynomial regression**:  
   Fit  
   $$
   y \approx \beta_0 + \beta_1 x + \beta_2 x^2 + ... + \beta_i x^i + ... 
   $$
   using least squares.  
-:::
 
 ---
 
