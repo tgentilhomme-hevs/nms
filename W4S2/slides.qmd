@@ -1,6 +1,6 @@
 ---
-title: "Week 1: Introduction & Taylor Series"
-subtitle: "W1S1: Introduction"
+title: "Week 4: Roots"
+subtitle: "W4S2: Newton's and Secant methods"
 format:
   live-revealjs:
     slide-number: true
@@ -10,7 +10,7 @@ format:
     preview-links: auto
     chalkboard: true
     logo: https://www.hevs.ch/_nuxt/img/logo_hesso.9af1d79.svg
-    footer: "W1S1 - Introduction"
+    footer: "W4S2 - Newton and Secant"
     include-in-header: ../_includes/revealscript.html
     include-after-body: ../_includes/backbutton.html
     
@@ -20,10 +20,95 @@ execute:
   eval: true       # ← this runs the code
 ---
 
-## Introduction
+## Newton’s Method (Root Finding)
 
-```{pyodide}
-print("Hello World!")
-print("Welcome to the Python Summer Course!")
-```
+![](img/NewtonIteration_Ani.gif)
+
+> ::: callout-tip
+**Highlight:** Newton = “solve the linear (tangent) approximation for the root.”
+:::
+
+---
+
+### From Taylor series (first order)**
+$$
+f(x) \approx f(x_k) + f'(x_k)\,(x-x_k)
+$$
+Set the approximation to zero to get the next iterate:
+$$
+0 \approx f(x_k) + f'(x_k)\,(x_{k+1}-x_k)
+\;\Rightarrow\; \\
+\boxed{x_{k+1} = x_k - \dfrac{f(x_k)}{f'(x_k)}}
+$$
+
+
+
+## Newton’s Method: Behavior & Practice
+
+**Convergence**
+
+- **Quadratic** near a simple root if $f'(x^{*})\neq 0$ and initial guess is close.
+- Very fast when it works.
+
+---
+
+### Requirements
+
+- Need $f'(x)$ (analytic or automatic differentiation).
+- Good initial guess helps a lot.
+
+---
+
+### Pitfalls
+
+- Can diverge or cycle if started poorly.
+- Fails if $f'(x_k)=0$ (division by zero) or derivatives are noisy.
+- May jump across discontinuities or non-smooth regions.
+
+### Misc
+
+- Hybridize with **bisection** when sign change is known.
+
+
+## Secant Method (Gradient-Free Newton)
+
+![](img/Metodo_delle_secanti.gif)
+
+> ::: callout-note
+**Highlight:** Secant ≈ “Newton without derivatives.”
+:::
+
+---
+
+### Gradient free
+
+**Motivation:** avoid computing $f'(x)$.
+
+**Finite-difference surrogate for the derivative**
+$$
+f'(x_k) \approx \frac{f(x_k)-f(x_{k-1})}{x_k-x_{k-1}}
+$$
+
+---
+
+### Plug into Newton’s update
+$$
+\boxed{
+x_{k+1} = x_k - f(x_k)\,
+\frac{x_k - x_{k-1}}{\,f(x_k) - f(x_{k-1})\,}
+}
+$$
+
+---
+
+## Usage
+
+- Needs **two initial guesses** $x_0, x_1$.
+- Each step uses the **secant slope** through $(x_{k-1},f_{k-1})$ and $(x_k,f_k)$.
+
+
+
+
+
+
 
