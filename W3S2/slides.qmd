@@ -1,6 +1,6 @@
 ---
-title: "Week 1: Introduction & Taylor Series"
-subtitle: "W1S1: Introduction"
+title: "Week 3: Differenciation and Integration"
+subtitle: "W3S2 - Integration"
 format:
   live-revealjs:
     slide-number: true
@@ -10,7 +10,7 @@ format:
     preview-links: auto
     chalkboard: true
     logo: https://www.hevs.ch/_nuxt/img/logo_hesso.9af1d79.svg
-    footer: "W1S1 - Introduction"
+    footer: "W3S2 - Integration"
     include-in-header: ../_includes/revealscript.html
     include-after-body: ../_includes/backbutton.html
     
@@ -20,10 +20,120 @@ execute:
   eval: true       # ← this runs the code
 ---
 
-## Introduction
+## Numerical Integration Overview
 
-```{pyodide}
-print("Hello World!")
-print("Welcome to the Python Summer Course!")
-```
+**Goal:** Approximate
+$$
+\int_a^b f(x)\,dx
+$$
+when $f(x)$ is known only at discrete points or is expensive to evaluate.
 
+**Idea:** Replace $f(x)$ by a simpler function that’s easy to integrate.
+
+> ::: callout-tip
+**Highlight:**  
+Integration =  “sum of small areas.”  
+All methods differ in **how they approximate the shape** of $f(x)$ on each subinterval.
+:::
+
+## Riemann Sums
+
+![Left-Right-Nidpoint](img/riemann.png)
+
+---
+
+### Rieman formulas
+
+Split $[a,b]$ into $n$ subintervals of width $h = (b-a)/n$.
+
+$$
+\int_a^b f(x)\,dx \approx \sum_{i=1}^{n} f(x_i^*)\,h
+$$
+
+- **Left rule:** $x_i^* = x_{i-1}$
+- **Right rule:** $x_i^* = x_i$
+- **Midpoint rule:** $x_i^* = (x_{i-1} + x_i)/2$
+
+---
+
+### Connection to Taylor Expansion
+
+If $f(x+h)$ ≈ $f(x) + h f'(x) + \frac{h^2}{2}f''(x) + \cdots$,
+
+then integrating over a small interval:
+$$
+\int_x^{x+h} f(t)\,dt \approx h f(x) + \frac{h^2}{2}f'(x) + \cdots
+$$
+
+:::::: {.callout-important}
+Riemann rules correspond to truncating this expansion at different terms.
+:::
+
+## Trapezoidal Rule
+
+
+![Trapezoidal](img/trap.png)
+
+---
+
+### Trapezoidal formula
+
+Approximate $f(x)$ **linearly** between $x_i$ and $x_{i+1}$:
+
+$$
+\int_{x_i}^{x_{i+1}} f(x)\,dx
+  \approx \frac{h}{2}\,[f(x_i) + f(x_{i+1})]
+$$
+
+Combine over all intervals:
+
+$$
+\int_a^b f(x)\,dx
+  \approx \frac{h}{2}\big[f(a) + 2\!\sum_{i=1}^{n-1}\!f(x_i) + f(b)\big]
+$$
+
+
+> ::: callout-note
+**Highlight:**  
+Trapezoidal rule = integrate a **linear interpolant**.
+:::
+
+## Simpson’s Rule
+
+
+![](img/simpson.png)
+
+--- 
+
+### Lagrange Interpolation
+
+Fit a **quadratic** (degree-2 Lagrange polynomial) through  
+three equally spaced points $x_0, x_1, x_2$:
+
+$$
+P_2(x) = f(x_0)L_0(x) + f(x_1)L_1(x) + f(x_2)L_2(x)
+$$
+
+Integrate $P_2(x)$ exactly over $[a,b]$:
+$$
+\boxed{\int_a^b f(x)\,dx \approx \frac{h}{3}\,[f(x_0) + 4f(x_1) + f(x_2)]}
+$$
+where $h = \frac{b-a}{2}$.
+
+---
+
+**Properties**
+
+- Based on **quadratic interpolation** (Lagrange)
+- **Fourth-order accurate** ($O(h^4)$)
+- Exact for polynomials up to degree 3
+
+> ::: callout-tip
+**Highlight:**  
+Simpson’s rule = integrate the **quadratic Lagrange interpolant**.
+:::
+
+## Lab
+
+- GC integration
+- [from scipy.integrate import simpson](https://docs.scipy.org/doc/scipy/reference/generated/scipy.integrate.simpson.html)

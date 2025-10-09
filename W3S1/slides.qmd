@@ -1,6 +1,6 @@
 ---
-title: "Week 1: Introduction & Taylor Series"
-subtitle: "W1S1: Introduction"
+title: "Week 3: Numerical differentiation/Integration"
+subtitle: "W3S1: Differentiation"
 format:
   live-revealjs:
     slide-number: true
@@ -10,7 +10,7 @@ format:
     preview-links: auto
     chalkboard: true
     logo: https://www.hevs.ch/_nuxt/img/logo_hesso.9af1d79.svg
-    footer: "W1S1 - Introduction"
+    footer: "W3S1 - Differenciation"
     include-in-header: ../_includes/revealscript.html
     include-after-body: ../_includes/backbutton.html
     
@@ -20,10 +20,184 @@ execute:
   eval: true       # ← this runs the code
 ---
 
-## Introduction
+## Numerical Differentiation: Why?
 
-```{pyodide}
-print("Hello World!")
-print("Welcome to the Python Summer Course!")
-```
+**Goal:** Estimate the derivative of a function from discrete data.
+
+$$
+f'(x) \approx \text{slope between nearby points}
+$$
+
+Used when:
+
+- The function has **no analytical derivative**, or  
+- Only **sampled values** $f(x_i)$ are available (e.g., experiment, simulation).
+
+> ::: callout-tip
+**Highlight:** Replace calculus limits by finite differences on sampled data.
+:::
+
+## Finite Differences: The Basic Idea
+
+Given samples \(f(x)\) on a uniform grid with spacing \(h\):
+
+$$
+x_{i+1} = x_i + h
+$$
+
+Approximate the derivative by comparing nearby function values:
+
+$$
+f'(x_i) \approx \frac{f(x_{i+1}) - f(x_i)}{h} \quad \text{(Forward difference)}
+$$
+
+## Overview
+
+![](img/overview.png)
+
+
+## Forward Difference
+
+**Formula**
+$$
+f'(x_i) \approx \frac{f(x_{i+1}) - f(x_i)}{h}
+$$
+
+**Properties**
+
+- Uses future point $x_{i+1}$  
+- **First-order accurate** (error $\propto h$)  
+- Simple but biased forward
+
+> ::: callout-note
+**Highlight:** Good for start of dataset or causal/time series data.
+:::
+
+## Backward Difference
+
+**Formula**
+$$
+f'(x_i) \approx \frac{f(x_i) - f(x_{i-1})}{h}
+$$
+
+**Properties**
+
+- Uses past point $x_{i-1}$  
+- **First-order accurate**  
+- Useful at the end of a dataset or when you cannot "look ahead"
+
+> ::: callout-note
+**Highlight:** Complement of forward difference.
+:::
+
+## Central Difference
+
+**Formula**
+$$
+f'(x_i) \approx \frac{f(x_{i+1}) - f(x_{i-1})}{2h}
+$$
+
+**Properties**
+
+- Uses both sides: **second-order accurate** (error $h^2$)  
+- Better accuracy and less bias, if both neighbors exist  
+- Requires interior points (not endpoints)
+
+> ::: callout-tip
+**Highlight:** Central difference gives best accuracy for evenly spaced data.
+:::
+
+## Formula from Taylor series
+
+We start with the Taylor expansions of $f(x+h)$ and $f(x-h)$:
+
+$$
+\begin{aligned}
+f(x+h) &= f(x) + h f'(x) + \frac{h^2}{2} f''(x) + \frac{h^3}{6} f^{(3)}(x) + \cdots \\
+f(x-h) &= f(x) - h f'(x) + \frac{h^2}{2} f''(x) - \frac{h^3}{6} f^{(3)}(x) + \cdots
+\end{aligned}
+$$
+
+---
+
+### Subtract the two series
+$$
+f(x+h) - f(x-h) = 2h f'(x) + \frac{2h^3}{6} f^{(3)}(x) + \cdots
+$$
+
+---
+
+### Divide by $2h$
+$$
+\frac{f(x+h) - f(x-h)}{2h} = f'(x) + \frac{h^2}{6} f^{(3)}(x) + \cdots
+$$
+
+---
+
+### Result
+$$
+\boxed{f'(x) \approx \frac{f(x+h) - f(x-h)}{2h}}
+$$
+
+and the **truncation error term** is proportional to $h^2$:
+
+$$
+\text{Error} \; \propto \; h^2
+$$
+
+> ::: callout-tip
+**Highlight:**  
+The odd terms cancel: that’s why the central difference is **second-order accurate**, while the forward/backward differences (using only one expansion) are **first-order**.
+:::
+
+## Central Difference Formula for the Second Derivative
+
+Start again from the Taylor expansions around $x$:
+
+$$
+\begin{aligned}
+f(x+h) &= f(x) + h f'(x) + \frac{h^2}{2} f''(x) + \frac{h^3}{6} f^{(3)}(x) + \frac{h^4}{24} f^{(4)}(x) + \cdots \\
+f(x-h) &= f(x) - h f'(x) + \frac{h^2}{2} f''(x) - \frac{h^3}{6} f^{(3)}(x) + \frac{h^4}{24} f^{(4)}(x) - \cdots
+\end{aligned}
+$$
+
+---
+
+### Add the two expansions
+
+$$
+f(x+h) + f(x-h) = 2f(x) + h^2 f''(x) + \frac{h^4}{12} f^{(4)}(x) + \cdots
+$$
+
+---
+
+### Isolate $f''(x)$
+
+$$
+f''(x) = \frac{f(x+h) - 2f(x) + f(x-h)}{h^2} - \frac{h^2}{12} f^{(4)}(x) + \cdots
+$$
+
+---
+
+### Result
+
+$$
+\boxed{f''(x) \approx \frac{f(x+h) - 2f(x) + f(x-h)}{h^2}}
+$$
+
+and the **truncation error** is proportional to $h^2$:
+
+$$
+\text{Error} \; \propto \; h^2
+$$
+
+> ::: callout-tip
+**Highlight:**  
+The central second-derivative formula is **second-order accurate** and symmetric: widely used in numerical ODEs, PDEs, and gradient approximations (see later courses).
+:::
+
+### Lab
+
+- First lab: we do together 
+- Second lab: your turn (evaluated) - effect of noise 
 
