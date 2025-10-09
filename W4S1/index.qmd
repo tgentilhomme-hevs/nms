@@ -1,20 +1,9 @@
-# Python Basics & Objects
+# Roots 1
 
-## Objectives
-- Introduction to Google Colab 
-- How to write simple Python code
-- Use variables, numbers, text, conditions, and loops
-- Understand that everything in Python is an "object"
-
-## Topics
-- Numbers, strings, booleans
-- Variables, Operators
-- if, else, for, while
-- print() and input()
-- Object methods like .upper() on strings
+- Bisection method
 
 
 ## Content
 
-[👨🏻‍🏫 Slides]({{< var base_url>}}slides/W1S1/slides.html){.btn .btn-outline-primary .btn role="button"} 
-[Slides PDF]({{< var base_url>}}slides/W1S1/slides.pdf){.btn .btn-outline-secondary .btn role="button"} 
+[👨🏻‍🏫 Slides]({{< var base_url>}}slides/W4S1/slides.html){.btn .btn-outline-primary .btn role="button"} 
+[Slides PDF]({{< var base_url>}}slides/W4S1/slides.pdf){.btn .btn-outline-secondary .btn role="button"} 

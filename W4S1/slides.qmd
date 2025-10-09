@@ -1,6 +1,6 @@
 ---
-title: "Week 1: Introduction & Taylor Series"
-subtitle: "W1S1: Introduction"
+title: "Week 4: Roots"
+subtitle: "W4S1: Bisection method"
 format:
   live-revealjs:
     slide-number: true
@@ -10,20 +10,106 @@ format:
     preview-links: auto
     chalkboard: true
     logo: https://www.hevs.ch/_nuxt/img/logo_hesso.9af1d79.svg
-    footer: "W1S1 - Introduction"
+    footer: "W4S1 - Bisection"
     include-in-header: ../_includes/revealscript.html
     include-after-body: ../_includes/backbutton.html
     
 execute:
-  echo: true       # ← this shows code
-  output: true     # ← this shows output
-  eval: true       # ← this runs the code
+  echo: true
+  output: true
+  eval: true
 ---
 
-## Introduction
+## Root Finding (Intro)
+
+**Goal:** Solve $f(x)=0$ when no closed-form root is available.
+
+**Main ideas**
+
+- Use **function values** to iteratively shrink the uncertainty on the root.
+- Stop when the **interval is small** or when $|f(x)|$ is below a **tolerance**.
+
+
+---
+
+### Popular methods (1D)
+
+- **Bisection:** robust, guaranteed with sign change (slow but sure).
+- **Newton (see next session):** fast (quadratic) but needs derivative & good initial guess.
+- **Secant:** like Newton without derivative (uses secant slopes).
+
+## Bisection Method
+
+![](img/Bisection_anime.gif)
+
+---
+
+### Algorithm
+
+**Setup:** pick $a,b$ with $f(a)\,f(b) < 0$ (sign change => a root lies inside).
+
+**Iteration**
+
+1. $m=\dfrac{a+b}{2}$ (midpoint)  
+2. If $f(a)\,f(m) < 0$ set $b \leftarrow m$ else $a\leftarrow m$  
+3. Repeat until $|b-a| < \varepsilon$ or $|f(m)| < \tau$
+
+---
+
+### Properties
+
+- **Guaranteed convergence** if $f$ is continuous and there’s a sign change.
+- **Linear** convergence; interval halves each step.
+
+## Bisection Method: visualization
 
 ```{pyodide}
-print("Hello World!")
-print("Welcome to the Python Summer Course!")
+import numpy as np
+import matplotlib.pyplot as plt
+from time import sleep
+
+# Function and initial interval
+def f(x): return np.cos(x) - x
+a, b = 0.0, 1.0
+
+tol = 1e-6
+max_iter = 10
+
+# Check sign change
+if f(a)*f(b) >= 0:
+    raise ValueError("f(a) and f(b) must have opposite signs.")
+
+# Bisection loop with live plots
+ak, bk = a, b
+for k in range(1, max_iter + 1):
+    m = 0.5 * (ak + bk)
+    fm = f(m)
+
+    # Generate points around current interval
+    xx = np.linspace(ak, bk, 400)
+    yy = f(xx)
+
+    plt.figure(figsize=(6, 4))
+    plt.axhline(0, color="k", lw=1)
+    plt.plot(xx, yy, label="f(x)")
+    plt.plot([ak, bk], [f(ak), f(bk)], "ro", label="Interval endpoints")
+    plt.plot(m, fm, "go", label="Midpoint")
+    plt.title(f"Iteration {k}\n[a={ak:.5f}, b={bk:.5f}, m={m:.5f}]")
+    plt.xlabel("x")
+    plt.ylabel("f(x)")
+    plt.xlim(ak, bk)
+    plt.legend()
+    plt.grid(True)
+    plt.show()
+
+    # Update interval
+    if abs(bk - ak) < tol or abs(fm) < tol:
+        print(f"Converged at iteration {k}: x ≈ {m:.6f}")
+        break
+    if f(ak) * fm < 0:
+        bk = m
+    else:
+        ak = m
+
 ```
 
