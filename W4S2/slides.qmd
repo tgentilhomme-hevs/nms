@@ -20,7 +20,7 @@ execute:
   eval: true       # ← this runs the code
 ---
 
-## Newton’s Method (Root Finding)
+## Newton-Raphson Method (Root Finding)
 
 ![](img/NewtonIteration_Ani.gif)
 
@@ -43,7 +43,7 @@ $$
 
 
 
-## Newton’s Method: Behavior & Practice
+## Newton-Raphson Method: Behavior & Practice
 
 **Convergence**
 
@@ -106,6 +106,40 @@ $$
 - Needs **two initial guesses** $x_0, x_1$.
 - Each step uses the **secant slope** through $(x_{k-1},f_{k-1})$ and $(x_k,f_k)$.
 
+## Lab
+
+- [scipy.optimize.root()](https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.root.html)
+
+```python
+# Usage example for system of non linear equation
+
+import numpy as np
+from scipy.optimize import root
+
+# Define the nonlinear system
+def F(vars):
+    x, y = vars
+    return [
+        x**2 + y**2 - 4, 
+        x * np.exp(y) - 1
+    ]
+
+# Initial guess
+x0 = [1.0, 0.0]
+
+# Solve using root
+sol = root(F, x0, method='hybr') # whcih method to use
+
+if sol.success:
+    x_sol, y_sol = sol.x
+    print(f"Converged: x = {x_sol:.6f}, y = {y_sol:.6f}")
+else:
+    print("Root finding did not converge!")
+
+# Check residuals
+print("Residuals:", F(sol.x))
+
+```
 
 
 
