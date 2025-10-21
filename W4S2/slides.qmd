@@ -30,7 +30,7 @@ execute:
 
 ---
 
-### From Taylor series (first order)**
+### From Taylor series (first order)
 $$
 f(x) \approx f(x_k) + f'(x_k)\,(x-x_k)
 $$
@@ -138,7 +138,6 @@ else:
 
 # Check residuals
 print("Residuals:", F(sol.x))
-
 ```
 
 
