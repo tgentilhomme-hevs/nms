@@ -91,7 +91,46 @@ $$
 **Highlight:** Gradient descent finds a *local* minimum, not necessarily the *best* one.
 :::
 
-## Beyond Gradient Descent: Global Optimization
+## Newton’s Method for Optimization
+
+**Gradient descent:**  
+$$
+x_{k+1} = x_k - \alpha \nabla F(x_k)
+$$
+
+works well but may **converge slowly** when the curvature varies a lot.
+
+---
+
+### Newton’s optimization update
+
+From a second-order Taylor expansion of $F(x)$ around $x_k$:
+$$
+F(x) \approx F(x_k) + \nabla F(x_k)^T (x - x_k)
++ \tfrac{1}{2}(x - x_k)^T H(x_k)(x - x_k)
+$$
+
+Minimizing this quadratic approximation gives:
+$$
+\boxed{x_{k+1} = x_k - H(x_k)^{-1}\,\nabla F(x_k)}
+$$
+where $H(x_k)$ is the **Hessian matrix** of second derivatives.
+
+---
+
+### Properties
+
+- **Quadratic convergence** near the minimum (much faster than gradient descent).  
+- Step size automatically adapts to local curvature.  
+- Equivalent to finding where the *tangent parabola* of $F(x)$ is minimum.
+
+> ::: callout-tip
+**Highlight:**  
+Newton’s optimization ≈ Gradient descent with a **local curvature correction** from the Hessian.
+:::
+
+
+## Beyond Gradient Methods: Global Optimization
 
 Sometimes we need to find the **global minimum**, not just a local one.
 

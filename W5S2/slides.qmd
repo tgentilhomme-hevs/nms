@@ -1,6 +1,7 @@
 ---
-title: "Week 1: Introduction & Taylor Series"
-subtitle: "W1S1: Introduction"
+title: "Week 5: Optimization"
+lightbox: true
+subtitle: "W5S1: LP & ILP"
 format:
   live-revealjs:
     slide-number: true
@@ -10,7 +11,7 @@ format:
     preview-links: auto
     chalkboard: true
     logo: https://www.hevs.ch/_nuxt/img/logo_hesso.9af1d79.svg
-    footer: "W1S1 - Introduction"
+    footer: "W5S2 - LP & ILP"
     include-in-header: ../_includes/revealscript.html
     include-after-body: ../_includes/backbutton.html
     
@@ -20,10 +21,108 @@ execute:
   eval: true       # ← this runs the code
 ---
 
-## Introduction
+## Linear Programming (LP): Concept
 
-```{pyodide}
-print("Hello World!")
-print("Welcome to the Python Summer Course!")
-```
+**Goal:** Optimize a linear objective under linear constraints
+
+$$
+\begin{aligned}
+\text{maximize or minimize:} &\quad c^T x \\
+\text{subject to:} &\quad A x \le b \\
+                    &\quad x \ge 0
+\end{aligned}
+$$
+
+where:
+
+- $x$: vector of decision variables  
+- $A, b, c$: given coefficients
+
+---
+
+### Geometrical interpretation
+- Each constraint defines a **half-plane** in space.
+- The feasible region is a **convex polytope** (polygon in 2D, polyhedron in 3D).
+- The **optimum** always lies at a **vertex** (corner) of this region.
+
+> ::: callout-tip
+**Highlight:**  
+LP = "find the best corner" of a feasible region shaped by linear inequalities.
+:::
+
+---
+
+![www.sulayman-mokhtarzada-learn-teach-discovery-innovation.com](img/lp.gif)
+
+## Metabolic flux optimization (see Lab W5S2)
+
+Objective: maximize **cell growth rate** or **product yield**  
+  $$
+  \max \; v_\text{biomass}
+  $$
+
+Subject to:
+
+  - **Stoichiometric constraints:** $S \, v = 0\$  (mass balance)
+  - **Flux limits:** $v_\text{min} \le v \le v_\text{max}$
+
+Decision variables: metabolic **fluxes** $v_i$
+
+---
+
+![https://doi.org/10.1101/053520](img/fba.jpg)
+
+
+## Integer Linear Programming (ILP)
+
+Same as LP, but **some or all variables must be integers:**
+$$
+x_i \in \mathbb{Z}
+$$
+
+---
+
+### General form
+$$
+\begin{aligned}
+\text{maximize or minimize:} &\quad c^T x \\
+\text{subject to:} &\quad A x \le b, \\
+                    &\quad x_i \in \mathbb{Z} \;\text{(for selected variables)}
+\end{aligned}
+$$
+
+---
+
+### Geometrical interpretation
+
+Feasible region = **set of lattice points** inside the LP polytope.
+
+The optimum is one of those discrete points.
+
+The feasible region is **no longer convex**, making the search harder.
+
+> ::: callout-tip
+**Highlight:**  
+ILP = LP + *discreteness*: the solution must lie on grid points.
+:::
+
+---
+
+![10.1007/978-3-642-14866-8_3](img/ILP.jpg)
+
+## Optimal experimental design or strain engineering
+
+Binary variable $x_i = 1$ if a gene is knocked out, 0 otherwise  
+
+Objective: minimize growth loss or maximize production yield
+$$
+  \max \; P(x) \;\;\text{s.t.}\;\; S v = 0, \; v_\text{min} \le v \le v_\text{max}, \; x_i \in \{0,1\}
+$$
+
+
+> ::: callout-note
+**Highlight:**  
+ILPs capture **yes/no or count-based biological decisions**, 
+where choices are discrete, not continuous.
+:::
 
