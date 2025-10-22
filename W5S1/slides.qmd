@@ -1,6 +1,6 @@
 ---
-title: "Week 1: Introduction & Taylor Series"
-subtitle: "W1S1: Introduction"
+title: "Week 5: Optimization"
+subtitle: "W5S1: Gradient descent & global optimization"
 format:
   live-revealjs:
     slide-number: true
@@ -10,9 +10,10 @@ format:
     preview-links: auto
     chalkboard: true
     logo: https://www.hevs.ch/_nuxt/img/logo_hesso.9af1d79.svg
-    footer: "W1S1 - Introduction"
+    footer: "W5S1 - Optimization"
     include-in-header: ../_includes/revealscript.html
     include-after-body: ../_includes/backbutton.html
+    css: ../styles.css
     
 execute:
   echo: true       # ← this shows code
@@ -20,10 +21,102 @@ execute:
   eval: true       # ← this runs the code
 ---
 
-## Introduction
+## Optimization: From Root Finding to Minimization
 
-```{pyodide}
-print("Hello World!")
-print("Welcome to the Python Summer Course!")
-```
+Root finding solves:
+$$
+f(x) = 0
+$$
+
+Optimization solves:
+$$
+\min_x F(x)
+$$
+
+## Gradient Descent: Core Idea
+
+**Goal:** Find a local minimum of a differentiable function $$F(x)$$.
+
+---
+
+![Source: Ng Andrew](img/gradient.gif)
+
+---
+
+### Iterative update
+
+$$
+x_{k+1} = x_k - \alpha \nabla F(x_k)
+$$
+
+- $\alpha$: **learning rate** (step size)  
+- $\nabla F(x_k)$: gradient (direction of steepest increase)  
+
+---
+
+**Intuition**
+
+- Like walking downhill with steps proportional to the slope.
+- Stops when the gradient is close to zero
+
+> ::: callout-tip
+**Highlight:** Gradient descent is Newton’s method **without dividing by the derivative**, simpler but often slower. But many variants exist!
+:::
+
+## Gradient Descent: some Applications
+
+**Where it’s used**
+
+- Training machine learning models (linear regression, neural networks)
+- Parameter estimation in biological models
+- Model calibration in systems biology or bioprocess engineering
+- Minimizing error or cost functions in optimization problems
+
+---
+
+**Why it’s popular**
+
+- Easy to implement
+- Works with large-scale, high-dimensional problems
+- Requires only function evaluations and gradients
+
+## Gradient Descent: Limitations
+
+- **Requires gradient**: not always easy to compute (e.g., black-box models, simulations).  
+- **Sensitive to learning rate**: too large → divergence, too small → slow.  
+- **Local minima / saddle points**: can get trapped and fail to find global solutions.  
+- **Flat regions (plateaus)**:
+
+::: callout-note
+**Highlight:** Gradient descent finds a *local* minimum, not necessarily the *best* one.
+:::
+
+## Beyond Gradient Descent: Global Optimization
+
+Sometimes we need to find the **global minimum**, not just a local one.
+
+**Why?**
+
+- Biological or engineering models may have **multiple optima**.
+- We may not know where the “true” solution lies.
+
+---
+
+### Examples of global optimization methods
+
+| Method | Principle | Pros | Cons |
+|--------|-----------|------|------|
+| **Simulated annealing** | Randomized exploration with decreasing randomness | Can escape local minima | Slow convergence |
+| **Genetic algorithms** | Evolutionary search with mutation and selection | Works without gradients | Needs many evaluations |
+| **Particle swarm optimization (PSO)** | Particles explore solution space cooperatively | Handles non-smooth landscapes | May converge prematurely |
+
+---
+
+### PSO
+
+![source: ricardochin.com](img/pso.gif)
+
+> ::: callout-tip
+**Highlight:** Global methods sacrifice **speed** and **efficiency** for **robustness**: useful when the landscape is complex or derivatives are unavailable.
+:::
 
