@@ -81,6 +81,23 @@ Each step moves along the **tangent line** at the current point.
 Euler’s method = “follow the slope” with small steps.
 :::
 
+## Euler’s Method and Taylor Series
+
+Starting from the ODE:
+$$
+\frac{dy}{dt} = f(t, y), \quad y(t_0) = y_0
+$$
+
+The **Taylor expansion** of $y(t)$ around $t_n$:
+$$
+y(t_{n+1}) = y(t_n) + h\,y'(t_n) + \frac{h^2}{2}y''(t_n) + \cdots
+$$
+
+Substitute $y'(t_n) = f(t_n, y_n)$ and ignoring high-oder terms:
+$$
+y(t_{n+1}) = y_n + h\,f(t_n, y_n)
+$$
+
 
 ## Example
 
