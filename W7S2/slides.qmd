@@ -1,6 +1,6 @@
 ---
-title: "Week 1: Introduction & Taylor Series"
-subtitle: "W1S1: Introduction"
+title: "Week 7: ODE solver higher order"
+subtitle: "W7S2: ODE-IVP 2"
 format:
   live-revealjs:
     slide-number: true
@@ -10,7 +10,7 @@ format:
     preview-links: auto
     chalkboard: true
     logo: https://www.hevs.ch/_nuxt/img/logo_hesso.9af1d79.svg
-    footer: "W1S1 - Introduction"
+    footer: "W7S2 - ODE-IVP 2"
     include-in-header: ../_includes/revealscript.html
     include-after-body: ../_includes/backbutton.html
     
@@ -18,12 +18,104 @@ execute:
   echo: true       # ← this shows code
   output: true     # ← this shows output
   eval: true       # ← this runs the code
+
 ---
 
-## Introduction
+## Beyond Euler
 
-```{pyodide}
-print("Hello World!")
-print("Welcome to the Python Summer Course!")
-```
+Euler’s method uses:
+$$
+y_{n+1} = y_n + h\,f(t_n, y_n)
+$$
+It’s **first-order accurate**
+
+## Heun’s Method
+
+Heun’s method uses two slope estimates:
+
+1. **Predictor:** $y^* = y_n + h\,f(t_n, y_n)$
+2. **Corrector:** $y_{n+1} = y_n + \tfrac{h}{2}\,[f(t_n, y_n) + f(t_{n+1}, y^*)]$
+
+The average of slops at the initial and predicted points.
+
+---
+
+### Interpretation
+
+- Euler uses the slope at the **start**.  
+- Heun averages **start and end** slopes.
+
+**Order:** 2 (error ∝ $h^2$)  
+
+## Midpoint Method
+
+Alternative form using the slope at the midpoint:
+
+$$
+\begin{aligned}
+k_1 &= f(t_n, y_n) \\
+k_2 &= f\!\left(t_n + \tfrac{h}{2},\, y_n + \tfrac{h}{2}k_1\right) \\
+y_{n+1} &= y_n + h\,k_2
+\end{aligned}
+$$
+
+Uses the slope halfway through the step.
+
+Also second order method.
+
+
+## Runge–Kutta (RK) Methods
+
+Higher-order Runge–Kutta methods extend this idea:
+
+- Take **multiple slope estimates** (stages) inside each interval.  
+- Combine them as a **weighted average** to match the Taylor expansion up to a desired order.
+
+---
+
+For example:
+
+- RK2: Heun or Midpoint  
+- RK4: classic “4-slope” method (standard in most solvers)
+
+> ::: callout-tip
+**Highlight:**  
+RK methods = *smart slope averaging* to mimic Taylor expansion accuracy, without explicitly computing higher derivatives.
+:::
+
+## Implicit Methods
+
+Explicit Euler:
+$$
+y_{n+1} = y_n + h\,f(t_n, y_n)
+$$
+
+Implicit (Backward) Euler:
+$$
+y_{n+1} = y_n + h\,f(t_{n+1}, y_{n+1})
+$$
+
+Now $y_{n+1}$ appears **on both sides** = > must solve a **root-finding problem**:
+$$
+F(y_{n+1}) = y_{n+1} - y_n - h\,f(t_{n+1}, y_{n+1}) = 0
+$$
+
+---
+
+### Properties
+
+- Requires iteration (e.g., Newton’s method).  
+- **Unconditionally stable** for many stiff problems.  
+- Common in chemical kinetics, diffusion, and metabolic models.
+
+> ::: callout-note
+**Highlight:**  
+Implicit = solve for the future value *that makes the equation true*.  
+They are more stable but computationally heavier.
+:::
+
+
+
+
+
 
