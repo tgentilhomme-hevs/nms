@@ -1,6 +1,6 @@
 ---
-title: "Week 1: Introduction & Taylor Series"
-subtitle: "W1S1: Introduction"
+title: "Week 8: ODE-BVP"
+subtitle: "W8S1: Shooting"
 format:
   live-revealjs:
     slide-number: true
@@ -10,7 +10,7 @@ format:
     preview-links: auto
     chalkboard: true
     logo: https://www.hevs.ch/_nuxt/img/logo_hesso.9af1d79.svg
-    footer: "W1S1 - Introduction"
+    footer: "W8S1 - Shooting"
     include-in-header: ../_includes/revealscript.html
     include-after-body: ../_includes/backbutton.html
     
@@ -20,10 +20,122 @@ execute:
   eval: true       # ← this runs the code
 ---
 
-## Introduction
+## Boundary Value Problems (BVP)
 
-```{pyodide}
-print("Hello World!")
-print("Welcome to the Python Summer Course!")
-```
+An **Initial Value Problem (IVP)** specifies all conditions at one point:
+$$
+\begin{cases}
+\dfrac{dy}{dt} = f(t, y), \\[3pt]
+y(t_0) = y_0
+\end{cases}
+$$
+
+A **Boundary Value Problem (BVP)** specifies values **at different points**:
+$$
+\begin{cases}
+\dfrac{d^2y}{dt^2} = f(t, y, y'), \\[3pt]
+y(a) = \alpha, \quad y(b) = \beta
+\end{cases}
+$$
+
+---
+
+### Intuition
+
+- IVP: “how does the system evolve from a start?”
+- BVP: “find a trajectory that satisfies constraints at both ends.”
+
+> ::: callout-tip
+**Highlight:**  
+BVPs arise when both **initial** and **final** states are known, not just the start.
+:::
+
+## Applications of BVPs
+
+**Physical and biological systems** often have spatial or steady-state constraints.
+
+| Domain | Example | Description |
+|:--|:--|:--|
+| Heat conduction | $\dfrac{d^2T}{dx^2} = 0$ | Fixed temperatures at the two ends |
+| Diffusion in tissues | $D\dfrac{d^2C}{dx^2} - kC = 0$ | Concentrations fixed at boundaries |
+| Membrane potential | $\dfrac{d^2V}{dx^2} = \frac{1}{\lambda^2}V$ | Voltage specified at both ends |
+| Enzyme kinetics in biofilms | Nonlinear diffusion–reaction equations | Concentration and flux constraints |
+
+
+## Converting 2nd-Order ODE (reminder)
+
+A 2nd-order equation:
+$$
+\dfrac{d^2y}{dt^2} = f(t, y, y')
+$$
+
+can be rewritten as a **system**:
+
+$$
+\begin{cases}
+y_1 = y, \\[3pt]
+y_2 = y' = \dfrac{dy_1}{dt}, \\[3pt]
+\dfrac{dy_2}{dt} = f(t, y_1, y_2)
+\end{cases}
+$$
+
+Boundary conditions:
+$$
+y_1(a) = \alpha, \quad y_1(b) = \beta
+$$
+
+--- 
+
+> ::: callout-tip
+**Highlight:**  
+Transforming to a first-order system allows reuse of numerical IVP solvers.
+:::
+
+## Shooting Method 
+
+Turn a **BVP** into an **IVP** by guessing the missing initial slope.
+
+Example:
+$$
+\begin{cases}
+y'' = f(t, y, y'),\\
+y(a) = \alpha, \quad y(b) = \beta
+\end{cases}
+$$
+
+- Guess $y'(a) = s$  
+- Solve the IVP from $a$ to $b$ using $s$  
+- Adjust $s$ until $y(b) = \beta$
+
+## Linear vs Nonlinear
+
+### Linear BVP
+If the ODE is linear in $y$:
+$$
+y'' = p(x) y' + q(x) y + r(x)
+$$
+the relationship between $s$ and $y(b)$ is linear.  
+=> Only **one or two IVP integrations** needed.
+
+---
+
+### Nonlinear BVP
+If $f$ depends nonlinearly on $y$ or $y'$:
+$$
+y'' = f(x, y, y')
+$$
+the mapping is **nonlinear**.  
+=> Use a **root-finding method** (e.g. Newton or secant) to correct $s$:
+$$
+g(s) = y_s(b) - \beta = 0
+$$
+
+> ::: callout-note
+**Highlight:**  
+The nonlinear shooting method combines **IVP integration** + **root finding**.
+:::
+
+
+
+
 
