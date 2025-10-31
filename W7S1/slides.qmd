@@ -1,6 +1,6 @@
 ---
-title: "Week 1: Introduction & Taylor Series"
-subtitle: "W1S1: Introduction"
+title: "Week 7: ODE Initial Value Problem"
+subtitle: "W7S1: ODE-IVP1"
 format:
   live-revealjs:
     slide-number: true
@@ -10,7 +10,7 @@ format:
     preview-links: auto
     chalkboard: true
     logo: https://www.hevs.ch/_nuxt/img/logo_hesso.9af1d79.svg
-    footer: "W1S1 - Introduction"
+    footer: "W7S1 - ODE-IVP 1"
     include-in-header: ../_includes/revealscript.html
     include-after-body: ../_includes/backbutton.html
     
@@ -20,10 +20,195 @@ execute:
   eval: true       # ← this runs the code
 ---
 
-## Introduction
+## ODE and Initial Value Problems (IVPs)
+
+An **Ordinary Differential Equation (ODE)** describes how a quantity changes over time:
+
+$$
+\frac{dy}{dt} = f(t, y)
+$$
+
+---
+
+An **Initial Value Problem (IVP)** specifies the starting point:
+
+$$
+\begin{cases}
+\dfrac{dy}{dt} = f(t, y), \\
+y(t_0) = y_0
+\end{cases}
+$$
+
+---
+
+### Interpretation
+
+- $y(t)$: unknown function (state, concentration, population, etc.)
+- $f(t, y)$: rate of change (the “rule” governing the system)
+- $y_0$: known initial condition at $t_0$
+
+> ::: callout-tip
+**Highlight:**  
+Solving an IVP = finding the trajectory $y(t)$ that follows the dynamics from a given start.
+:::
+
+## Euler’s Method 
+
+Given:
+
+$$
+\frac{dy}{dt} = f(t, y), \quad y(t_0) = y_0
+$$
+
+Approximate $y(t)$ step-by-step:
+
+$$
+y_{n+1} = y_n + h\, f(t_n, y_n)
+$$
+
+where:
+
+- $h$: step size  
+- $f(t_n, y_n)$: local slope of $y$
+
+---
+
+### Geometric idea
+Each step moves along the **tangent line** at the current point.
+
+> ::: callout-note
+**Highlight:**  
+Euler’s method = “follow the slope” with small steps.
+:::
+
+
+## Example
 
 ```{pyodide}
-print("Hello World!")
-print("Welcome to the Python Summer Course!")
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Define ODE: dy/dt = -y (exponential decay)
+def f(t, y):
+    return -y
+
+# Initial condition
+t0, y0 = 0, 1
+h = 0.5
+n = 10
+
+# Euler iteration
+t = np.linspace(t0, t0 + n*h, n+1)
+y = np.zeros_like(t)
+y[0] = y0
+for i in range(n):
+    y[i+1] = y[i] + h * f(t[i], y[i])
+
+# Exact solution
+y_exact = np.exp(-t)
+
+plt.figure(figsize=(6,4))
+plt.plot(t, y_exact, 'k-', label='Exact solution')
+plt.plot(t, y, 'o--', label="Euler's method")
+plt.xlabel('t')
+plt.ylabel('y')
+plt.title("Euler Method for dy/dt = -y")
+plt.legend()
+plt.grid(True)
+plt.show()
 ```
+
+
+---
+
+## Second-Order ODEs: Systems of First-Order Equations
+
+Many physical/biological systems use **second-order ODEs**:
+
+$$
+\frac{d^2y}{dt^2} = f(t, y, y')
+$$
+
+---
+
+### Convert to a system
+
+$$
+\begin{cases}
+y_1 = y \\
+y_2 = y' = \frac{dy_1}{dt}
+\end{cases}
+\Rightarrow
+\begin{cases}
+\frac{dy_1}{dt} = y_2 \\
+\frac{dy_2}{dt} = f(t, y_1, y_2)
+\end{cases}
+$$
+
+Then apply Euler  to this **system form**.
+
+> ::: callout-tip
+**Highlight:**  
+Any higher-order ODE can be rewritten as a **system of first-order ODEs**.
+:::
+
+## Example: Harmonic Oscillator
+
+$$
+\frac{d^2y}{dt^2} = -\omega^2 y
+$$
+
+Let:
+
+$$
+\begin{cases}
+y_1 = y \\
+y_2 = \dot{y}
+\end{cases}
+\Rightarrow
+\begin{cases}
+\dot{y_1} = y_2 \\
+\dot{y_2} = -\omega^2 y_1
+\end{cases}
+$$
+
+with initial condition $y(0)=1$, $\dot{y}(0)=0$  
+
+## Phase Flow Representation
+
+In a **2D system**, we can visualize trajectories in the **phase plane** $(y_1, y_2)$.
+
+$$
+\begin{cases}
+\dot{y_1} = y_2 \\
+\dot{y_2} = -y_1
+\end{cases}
+$$
+
+---
+
+### The flow shows closed orbits
+
+```{pyodide}
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Define grid
+Y1, Y2 = np.meshgrid(np.linspace(-2, 2, 20), np.linspace(-2, 2, 20))
+dY1 = Y2
+dY2 = -Y1
+
+# Normalize for display
+norm = np.sqrt(dY1**2 + dY2**2)
+dY1, dY2 = dY1/norm, dY2/norm
+
+plt.figure(figsize=(6,6))
+plt.quiver(Y1, Y2, dY1, dY2, color='C0')
+plt.title("Phase Flow: Harmonic Oscillator")
+plt.xlabel("$y_1$ (position)")
+plt.ylabel("$y_2$ (velocity)")
+plt.grid(True)
+
+```
+
 
